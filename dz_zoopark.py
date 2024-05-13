@@ -14,7 +14,7 @@
 # `Veterinarian`, которые могут иметь специфические методы
 # (например, `feed_animal()` для `ZooKeeper` и `heal_animal()` для `Veterinarian`).
 
-
+import pickle
 class Zoo:
     def __init__(self):
         self.animals = []
@@ -25,6 +25,15 @@ class Zoo:
 
     def add_staff(self, staff):
         self.staff.append(staff)
+
+    def save_zoo_info(self, file_name):
+            with open(file_name, 'wb') as file:
+                pickle.dump(self, file)
+
+    @classmethod
+    def load_zoo_info(cls, file_name):
+            with open(file_name, 'rb') as file:
+                return pickle.load(file)
 class Animal:
     def __init__(self, name, age):
         self.name = name
@@ -128,6 +137,12 @@ zoo.add_animal(bird)
 zoo.add_animal(mammal)
 zoo.add_animal(reptile)
 zoo.add_staff(staff)
+
+# Сохраняем информацию о зоопарке в файл
+zoo.save_zoo_info("zoo_info.pkl")
+
+# Загружаем информацию о зоопарке из файла
+new_zoo = Zoo.load_zoo_info("zoo_info.pkl")
 
 for animal in zoo.animals:
     print(f"{animal.name} издает звук: {animal.make_sound()}")
